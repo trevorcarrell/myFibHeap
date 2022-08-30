@@ -22,7 +22,7 @@ class myFibHeap {
         /* findMin() method for a Fibonacci Heap, simply returns our minimum fibHeapNode;
          * we keep track of this constantly, so we just return it immediately.
          */
-        fibHeapNode *findMin();
+        fibHeapNode *getMin();
 
         /* deleteMin() method for a Fibonacci Heap, deletes the marked var::_minRoot and puts its children
          * into the root list as their own trees, while simutaneously linking them into the var::_roots
@@ -88,8 +88,17 @@ class myFibHeap {
         // linkNodes() method links two nodes together in a doubly linked list.
         void linkNode(fibHeapNode *node);
 
+        // unlinkNodes() methood unlinks a given node from it's doubly linked list.
+        void unlinkNode(fibHeapNode *node);
+
         /* updateMin() method takes a node and compares it to the current min, updates if node value
          * is less than current _minRoot value.
          */
         void updateMin(fibHeapNode *node);
+
+        // findNewMin() method finds a new minimum value in root list after _minRoot is deleted.
+        void findNewMin();
+
+        // detachChild() method detaches a child from its parent.
+        void detachChild(fibHeapNode *child);
 };

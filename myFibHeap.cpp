@@ -1,6 +1,7 @@
 #include <iostream>
 #include "myFibHeap.h"
 
+
 using namespace std;
 
 
@@ -79,11 +80,10 @@ void myFibHeap::linkNode(fibHeapNode *node) {
     _roots->right = node;
     node->right->left = node;
 
-    // Increment _numRoots and check if we need to update our minimum.
+    // Increment _numRoots, and check if we need to update our minimum.
     _numRoots++;
     cout << "Node added and rewired." << endl;
     updateMin(node);
-    return;
 }
 
 
@@ -95,8 +95,7 @@ void myFibHeap::linkNode(fibHeapNode *node) {
  * was added to fibonacci heap.
  */
 void myFibHeap::insert(fibHeapNode *node) {
-    cout << "Node " << node << "added to heap!" << endl;
-    return;
+    linkNode(node);  // Accidentally made the linkNode() method first, which is basically insert.
 }
 
 
@@ -104,13 +103,85 @@ void myFibHeap::insert(fibHeapNode *node) {
  * 
  * @returns A pointer to _minRoot.
  */
-fibHeapNode *myFibHeap::findMin() {
+fibHeapNode *myFibHeap::getMin() {
     return _minRoot;
 }
 
 
+/* Function: findNewMin()
+ *
+ * @returns Nothing, explores _roots to find minimum value in _roots linked list. Updates accordingly.
+ * Additionally, prints out new value of _minRoot.
+ */
+void myFibHeap::findNewMin() {
+    fibHeapNode *cur = _roots;
+    int nodesExplored = 1;
+    int currentMin = cur->value;
+
+    // We keep going through the linked while there are still roots to explore.
+    while (nodesExplored != _numRoots) {
+        cur = cur->right;  // We already explored cur, so we can move on.
+
+        // Update currentMin if necessary.
+        if (cur->value < currentMin) {
+            currentMin = cur->value;
+            _minRoot = cur;
+        }
+        nodesExplored++;
+    }
+
+    cout << "New minimum found! _minRoot now has a value of " << _minRoot->value << endl;
+}
+
+
+/* Function: detachChild(fibHeapNode *child)
+ *
+ * @param child The child node we are detaching.
+ * 
+ * @returns Nothing, detaches node without returning.
+ */
+void myFibHeap::detachChild(fibHeapNode *child) {
+    child->parent = nullptr;
+    child->left = nullptr;
+    child->right = nullptr;
+}
+
+
+void myFibHeap::unlinkNode(fibHeapNode *node) {
+    node->left->right = node->right;
+    node->right->left = node->left;
+
+    // Unlink left and right (we really don't ~have~ to do this).
+    node->right = nullptr; node->left = nullptr;
+
+    // Unlink parent and child (again, we really don't have to do this).
+    node->parent = nullptr; node->children = nullptr;
+
+    cout << "Node has been unlinked." << endl;
+}
+
+
+
 void myFibHeap::deleteMin() {
-    return;
+    fibHeapNode *curChild = _minRoot->children;
+    int childrenCount = 0;
+
+    // We continue through all children, detaching and linking them into the root list.
+    while (childrenCount != _minRoot->numChildren) {
+        fibHeapNode *sibling = curChild->right;
+        detachChild(curChild);
+        linkNode(curChild);
+        childrenCount++;
+        curChild = sibling;
+    }
+
+    // Unlink _minRoot and delete it; find new minimum.
+    unlinkNode(_minRoot);
+    cout << "Deleting _minRoot with a value of: " << _minRoot->value << endl;
+    _minRoot = nullptr;
+    findNewMin();
+    
+    
 }
 
 
