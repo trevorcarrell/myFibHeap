@@ -82,6 +82,9 @@ class myFibHeap {
          */
         fibHeapNode *_minRoot;
 
-        // createNode method creates a node than can be used for our fibonacci heap.
+        // createNode() method creates a node than can be used for our fibonacci heap.
         fibHeapNode *createNode(int value);
+
+        // linkNodes() method links two nodes together in a doubly linked list.
+        void linkNode(fibHeapNode *node);
 };

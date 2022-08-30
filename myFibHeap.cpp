@@ -5,6 +5,10 @@ using namespace std;
 
 
 myFibHeap::myFibHeap() {
+    _roots = nullptr;
+    _numRoots = 0;
+    _numNodes = 0;
+    
     return;
 }
 
@@ -27,6 +31,27 @@ myFibHeap::~myFibHeap() {
 fibHeapNode *myFibHeap::createNode(int value) {
     fibHeapNode newNode = {.value = value, .numChildren = 0};
     return &newNode;
+}
+
+
+void myFibHeap::linkNode(fibHeapNode *node) {
+    // If this is the first node we enter, add it to list.
+    if (!_roots) {
+        _roots = node;
+        _minRoot = node;
+        _numRoots++;
+
+        // Rewire node to maintain cyclic property.
+        node->left = node;
+        node->right = node;
+
+        cout << "First node in heap; set as minimum root and head of _roots list." << endl;
+        return;
+    }
+    
+    // Otherwise, we link node into list. Easiest way is to link to node at _roots pointer.
+    
+
 }
 
 
