@@ -87,4 +87,9 @@ class myFibHeap {
 
         // linkNodes() method links two nodes together in a doubly linked list.
         void linkNode(fibHeapNode *node);
+
+        /* updateMin() method takes a node and compares it to the current min, updates if node value
+         * is less than current _minRoot value.
+         */
+        void updateMin(fibHeapNode *node);
 };

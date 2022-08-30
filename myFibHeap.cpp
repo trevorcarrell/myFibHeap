@@ -34,24 +34,56 @@ fibHeapNode *myFibHeap::createNode(int value) {
 }
 
 
+/* Function: updateMin(fibHeapNode *node)
+ *
+ * @param node The node whose value we are comparing to our _minRoot's value.
+ * 
+ * @returns Nothing, updated _minRoot if value of node is less than value of _minRoot. Prints accordingly.
+ */
+void myFibHeap::updateMin(fibHeapNode *node) {
+    if (node->value < _minRoot->value) {
+        cout << "_minRoot updated! " << node->value << " is less than " << _minRoot->value << "." << endl;
+        _minRoot = node;
+    }
+}
+
+
+/* Function: linkNode(fibHeapNode *node)
+ *
+ * @param node A fibHeapNode * to be linked into our _roots list.
+ * 
+ * @returns Nothing, prints out that a new node was added - alternative depending on case.
+ */ 
 void myFibHeap::linkNode(fibHeapNode *node) {
     // If this is the first node we enter, add it to list.
     if (!_roots) {
         _roots = node;
         _minRoot = node;
-        _numRoots++;
 
         // Rewire node to maintain cyclic property.
         node->left = node;
         node->right = node;
 
+        _numRoots++;
         cout << "First node in heap; set as minimum root and head of _roots list." << endl;
         return;
     }
     
     // Otherwise, we link node into list. Easiest way is to link to node at _roots pointer.
-    
 
+    // First, connect new node.
+    node->right = _roots->right;
+    node->left = _roots->right->left;
+
+    // Second, rewire _roots and right neighbor to new node.
+    _roots->right = node;
+    node->right->left = node;
+
+    // Increment _numRoots and check if we need to update our minimum.
+    _numRoots++;
+    cout << "Node added and rewired." << endl;
+    updateMin(node);
+    return;
 }
 
 
